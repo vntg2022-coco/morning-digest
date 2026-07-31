@@ -1,68 +1,152 @@
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 
-export default function Login() {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+const NAVY = '#0D1B3E'
+const BLUE = '#2563EB'
+const SUBTEXT = '#5A6A8A'
+const BORDER = '#E0E6F0'
+const BG = '#F7F8FC'
 
-  function handleLogin(e) {
-    e.preventDefault()
-    setLoading(true)
-    setTimeout(() => {
-      router.push('/dashboard')
-    }, 800)
-  }
+const STATS = [
+  { value: '6+', label: 'メディア' },
+  { value: '毎朝', label: '自動配信' },
+  { value: '英・日', label: '対訳' },
+  { value: '5分', label: 'で読める' },
+]
+
+const FEATURES = [
+  { icon: '🎯', title: '英語レベルに合わせて', desc: '初級〜上級まで、読み手の英語レベルに合わせて要約の難易度を自動調整します。' },
+  { icon: '⏰', title: '毎朝自動配信', desc: 'AIが毎朝ニュースを検索・要約・英日翻訳し、決まった時刻にお届けします。' },
+  { icon: '🗂️', title: 'ジャンル・件数カスタマイズ', desc: '政治・経済・テクノロジーなど興味のあるジャンルと配信件数を自由に設定できます。' },
+  { icon: '🏫', title: '塾・学校向け教材データ', desc: '英日対訳形式なので、そのまま英語の教材・授業のリーディング素材として活用できます。' },
+]
+
+export default function LandingPage() {
+  const router = useRouter()
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F7F8FC', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
-      <div style={{ width: '100%', maxWidth: 400 }}>
-        {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#2563EB' }} />
-            <span style={{ fontSize: 20, fontWeight: 700, color: '#0D1B3E' }}>Morning Digest</span>
+    <div style={{ minHeight: '100vh', background: '#fff', color: NAVY, fontFamily: 'inherit' }}>
+      {/* Header */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 20, background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(6px)', borderBottom: `1px solid ${BORDER}` }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 16 }}>
+            <div style={{ width: 9, height: 9, borderRadius: '50%', background: BLUE }} />
+            Morning Digest
           </div>
-          <p style={{ fontSize: 13, color: '#5A6A8A', margin: 0 }}>世界のニュースを毎朝あなたへ</p>
-        </div>
-
-        {/* Card */}
-        <div style={{ background: '#fff', border: '1px solid #E0E6F0', borderRadius: 16, padding: 32 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 600, color: '#0D1B3E', marginBottom: 24, textAlign: 'center' }}>ログイン</h2>
-          <form onSubmit={handleLogin}>
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#5A6A8A', display: 'block', marginBottom: 6 }}>メールアドレス</label>
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                style={{ width: '100%', padding: '10px 14px', border: '1px solid #E0E6F0', borderRadius: 8, fontSize: 14, outline: 'none', color: '#1A1A2E' }}
-              />
-            </div>
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#5A6A8A', display: 'block', marginBottom: 6 }}>パスワード</label>
-              <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
-                style={{ width: '100%', padding: '10px 14px', border: '1px solid #E0E6F0', borderRadius: 8, fontSize: 14, outline: 'none', color: '#1A1A2E' }}
-              />
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <span onClick={() => router.push('/login')} style={{ fontSize: 13, color: SUBTEXT, cursor: 'pointer' }}>ログイン</span>
             <button
-              type="submit"
-              style={{ width: '100%', padding: '13px', background: '#0D1B3E', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
+              onClick={() => router.push('/login')}
+              style={{ padding: '9px 18px', background: NAVY, color: '#fff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
             >
-              {loading ? '...' : 'ログイン'}
+              無料で始める
             </button>
-          </form>
-          <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: '#5A6A8A' }}>
-            アカウントをお持ちでない方は{' '}
-            <span style={{ color: '#2563EB', cursor: 'pointer', fontWeight: 500 }}>新規登録</span>
-          </p>
+          </div>
         </div>
+      </div>
+
+      {/* Hero */}
+      <div style={{ background: `linear-gradient(180deg, ${BG} 0%, #fff 100%)`, padding: '72px 24px 56px', textAlign: 'center' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto' }}>
+          <span style={{ display: 'inline-block', fontSize: 12, fontWeight: 600, color: BLUE, background: '#EFF4FF', padding: '5px 14px', borderRadius: 20, marginBottom: 20 }}>
+            AI × ニュース × 英語教育
+          </span>
+          <h1 style={{ fontSize: 40, fontWeight: 800, lineHeight: 1.35, margin: '0 0 18px' }}>
+            世界のニュースを<br />英語と日本語で<br />毎朝あなたへ
+          </h1>
+          <p style={{ fontSize: 15, color: SUBTEXT, lineHeight: 1.8, margin: '0 0 28px' }}>
+            ロイター・AP通信・BBC・NYTなど主要メディアから、AIが厳選したニュースを英日対訳で毎朝お届け。
+            メール・LINE・Webダッシュボードから、あなたに合わせたレベルで読めます。
+          </p>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => router.push('/login')}
+              style={{ padding: '13px 26px', background: NAVY, color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
+            >
+              無料で始める
+            </button>
+            <button
+              onClick={() => router.push('/login')}
+              style={{ padding: '13px 26px', background: '#fff', color: NAVY, border: `1px solid ${BORDER}`, borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
+            >
+              デモを見る
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 64px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, textAlign: 'center' }}>
+          {STATS.map(s => (
+            <div key={s.label} style={{ background: BG, borderRadius: 12, padding: '20px 8px' }}>
+              <div style={{ fontSize: 22, fontWeight: 800, color: NAVY }}>{s.value}</div>
+              <div style={{ fontSize: 11, color: SUBTEXT, marginTop: 4 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Features */}
+      <div style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px 72px' }}>
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: BLUE, letterSpacing: '.08em' }}>FEATURES</span>
+          <h2 style={{ fontSize: 26, fontWeight: 700, margin: '8px 0 0' }}>英語教育にすぐ使える理由</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+          {FEATURES.map(f => (
+            <div key={f.title} style={{ border: `1px solid ${BORDER}`, borderRadius: 12, padding: 24 }}>
+              <div style={{ fontSize: 22, marginBottom: 10 }}>{f.icon}</div>
+              <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{f.title}</div>
+              <div style={{ fontSize: 13, color: SUBTEXT, lineHeight: 1.7 }}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Pricing */}
+      <div style={{ background: BG, padding: '72px 24px' }}>
+        <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: BLUE, letterSpacing: '.08em' }}>PRICING</span>
+          <h2 style={{ fontSize: 26, fontWeight: 700, margin: '8px 0 40px' }}>シンプルな料金体系</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20, textAlign: 'left' }}>
+            <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: 28 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: SUBTEXT, marginBottom: 6 }}>フリー</div>
+              <div style={{ fontSize: 30, fontWeight: 800, marginBottom: 16 }}>¥0</div>
+              <div style={{ fontSize: 13, color: SUBTEXT, lineHeight: 2 }}>
+                ・毎朝メール3件配信<br />
+                ・英日対訳ニュース<br />
+                ・基本ジャンル設定
+              </div>
+            </div>
+            <div style={{ background: NAVY, borderRadius: 14, padding: 28, color: '#fff', position: 'relative' }}>
+              <span style={{ position: 'absolute', top: 16, right: 16, fontSize: 10, fontWeight: 700, background: BLUE, padding: '3px 10px', borderRadius: 20 }}>おすすめ</span>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#9EB6E8', marginBottom: 6 }}>プレミアム</div>
+              <div style={{ fontSize: 30, fontWeight: 800, marginBottom: 16 }}>¥980<span style={{ fontSize: 13, fontWeight: 500 }}> / 月</span></div>
+              <div style={{ fontSize: 13, color: '#C9D6EF', lineHeight: 2 }}>
+                ・記事件数無制限<br />
+                ・Webダッシュボード＋アーカイブ検索<br />
+                ・LINE配信・キーワードアラート
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Final CTA */}
+      <div style={{ padding: '72px 24px', textAlign: 'center' }}>
+        <h2 style={{ fontSize: 26, fontWeight: 700, margin: '0 0 12px' }}>今日から、世界の授業を教室に。</h2>
+        <p style={{ fontSize: 14, color: SUBTEXT, margin: '0 0 28px' }}>登録は無料。数十秒で始められます。</p>
+        <button
+          onClick={() => router.push('/login')}
+          style={{ padding: '13px 30px', background: NAVY, color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
+        >
+          無料で始める
+        </button>
+      </div>
+
+      {/* Footer */}
+      <div style={{ borderTop: `1px solid ${BORDER}`, padding: '24px', textAlign: 'center', fontSize: 12, color: SUBTEXT }}>
+        © {new Date().getFullYear()} Morning Digest
       </div>
     </div>
   )

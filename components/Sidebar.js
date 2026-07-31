@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 const navItems = [
   { key: 'home', icon: '📰', label: 'ホーム' },
@@ -7,6 +8,16 @@ const navItems = [
 ]
 
 export default function Sidebar({ active, onNav }) {
+  const router = useRouter()
+
+  function handleLogout() {
+    router.push('/login')
+  }
+
+  function handlePlanChange() {
+    router.push('/billing')
+  }
+
   return (
     <div style={{ width: 220, background: '#0D1B3E', display: 'flex', flexDirection: 'column', minHeight: '100vh', flexShrink: 0 }}>
       {/* Logo */}
@@ -39,10 +50,10 @@ export default function Sidebar({ active, onNav }) {
         ))}
 
         <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', padding: '16px 20px 8px' }}>アカウント</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 20px', fontSize: 13, color: 'rgba(255,255,255,0.55)', cursor: 'pointer' }}>
+        <div onClick={handlePlanChange} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 20px', fontSize: 13, color: 'rgba(255,255,255,0.55)', cursor: 'pointer' }}>
           <span>👑</span> プランを変更
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 20px', fontSize: 13, color: 'rgba(255,255,255,0.55)', cursor: 'pointer' }}>
+        <div onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 20px', fontSize: 13, color: 'rgba(255,255,255,0.55)', cursor: 'pointer' }}>
           <span>🚪</span> ログアウト
         </div>
       </div>
