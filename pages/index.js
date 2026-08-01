@@ -7,7 +7,6 @@ const BORDER = '#E0E6F0'
 const BG = '#F7F8FC'
 
 const STATS = [
-  { value: '6+', label: 'メディア' },
   { value: '毎朝', label: '自動配信' },
   { value: '英・日', label: '対訳' },
   { value: '5分', label: 'で読める' },
@@ -64,19 +63,13 @@ export default function LandingPage() {
             >
               無料で始める
             </button>
-            <button
-              onClick={() => router.push('/login')}
-              style={{ padding: '13px 26px', background: '#fff', color: NAVY, border: `1px solid ${BORDER}`, borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
-            >
-              デモを見る
-            </button>
           </div>
         </div>
       </div>
 
       {/* Stats */}
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 64px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, textAlign: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, textAlign: 'center' }}>
           {STATS.map(s => (
             <div key={s.label} style={{ background: BG, borderRadius: 12, padding: '20px 8px' }}>
               <div style={{ fontSize: 22, fontWeight: 800, color: NAVY }}>{s.value}</div>
