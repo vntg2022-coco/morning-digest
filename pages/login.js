@@ -6,9 +6,15 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   function handleLogin(e) {
     e.preventDefault()
+    if (!email.trim() || !password.trim()) {
+      setError('メールアドレスとパスワードを入力してください')
+      return
+    }
+    setError('')
     setLoading(true)
     setTimeout(() => {
       router.push('/dashboard')
@@ -54,6 +60,9 @@ export default function Login() {
                 style={{ width: '100%', padding: '10px 14px', border: '1px solid #E0E6F0', borderRadius: 8, fontSize: 14, outline: 'none', color: '#1A1A2E' }}
               />
             </div>
+            {error && (
+              <p style={{ color: '#DC2626', fontSize: 12, marginBottom: 16, marginTop: -8 }}>{error}</p>
+            )}
             <button
               type="submit"
               style={{ width: '100%', padding: '13px', background: '#0D1B3E', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
@@ -63,7 +72,7 @@ export default function Login() {
           </form>
           <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: '#5A6A8A' }}>
             アカウントをお持ちでない方は{' '}
-            <span style={{ color: '#2563EB', cursor: 'pointer', fontWeight: 500 }}>新規登録</span>
+            <span onClick={() => router.push('/signup')} style={{ color: '#2563EB', cursor: 'pointer', fontWeight: 500 }}>新規登録</span>
           </p>
         </div>
       </div>
