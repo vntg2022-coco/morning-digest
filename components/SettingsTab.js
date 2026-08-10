@@ -1,8 +1,14 @@
 import { useState } from 'react'
 
+const LANGUAGES = ['英語', '中国語', '韓国語', 'フランス語', 'スペイン語', 'ドイツ語', '日本語']
+const LEVELS = ['初級', '中級', '上級']
+
 export default function SettingsTab() {
   const [genres, setGenres] = useState({ '政治・外交': true, '経済・金融': true, 'テクノロジー・AI': true, '社会・環境': false, 'スポーツ': false })
   const [channels, setChannels] = useState({ 'メール配信': true, 'LINE配信': true })
+  const [learnLang, setLearnLang] = useState('英語')
+  const [nativeLang, setNativeLang] = useState('日本語')
+  const [level, setLevel] = useState('中級')
   const [saved, setSaved] = useState(false)
 
   function toggleGenre(key) {
@@ -36,14 +42,28 @@ export default function SettingsTab() {
     </div>
   )
 
+  const Select = ({ value, onChange, options }) => (
+    <select
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      style={{ color: '#2563EB', fontSize: 12, fontWeight: 500, border: '1px solid #E0E6F0', borderRadius: 6, padding: '4px 8px', background: '#fff', cursor: 'pointer', outline: 'none' }}
+    >
+      {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+    </select>
+  )
+
   return (
     <div style={{ padding: 28, maxWidth: 600 }}>
       <Card title="📬 配信設定">
         <Row label="配信時刻" right={<span style={{ color: '#2563EB', fontSize: 12, fontWeight: 500 }}>毎朝 7:00 AM</span>} />
         <Row label="記事件数" right={<span style={{ color: '#2563EB', fontSize: 12, fontWeight: 500 }}>4件</span>} />
         <Row label="要約の長さ" right={<span style={{ color: '#2563EB', fontSize: 12, fontWeight: 500 }}>普通（5〜7行）</span>} />
-        <Row label="言語" right={<span style={{ color: '#2563EB', fontSize: 12, fontWeight: 500 }}>英日対訳</span>} />
-        <Row label="英語レベル" right={<span style={{ color: '#2563EB', fontSize: 12, fontWeight: 500 }}>中級（英検2級）</span>} />
+        <Row label="学ぶ言語" right={<Select value={learnLang} onChange={setLearnLang} options={LANGUAGES} />} />
+        <Row label="母国語" right={<Select value={nativeLang} onChange={setNativeLang} options={LANGUAGES} />} />
+        <Row label="レベル" right={<Select value={level} onChange={setLevel} options={LEVELS} />} />
+        {learnLang === nativeLang && (
+          <p style={{ fontSize: 11, color: '#DC2626', margin: '8px 0 0' }}>学ぶ言語と母国語は異なる言語を選んでください</p>
+        )}
       </Card>
 
       <Card title="🌐 興味ジャンル">
