@@ -30,7 +30,7 @@ export default function Billing() {
             Stripeの決済ページで、クレジットカード情報の入力・お支払いができます。
           </p>
           <a
-            href="https://buy.stripe.com/test_eVq8wRezBcGFa5I57T2Fa00"
+            href="https://buy.stripe.com/test_bJe14o6rAfNf9hZcRp2oE00"
             target="_blank"
             rel="noopener noreferrer"
             style={{ display: 'block', width: '100%', padding: '13px', background: '#0D1B3E', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}
