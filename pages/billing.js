@@ -27,14 +27,16 @@ export default function Billing() {
         <div style={{ background: '#fff', border: '1px solid #E0E6F0', borderRadius: 12, padding: 24 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: '#0D1B3E', marginBottom: 10 }}>お支払い情報の管理</div>
           <p style={{ fontSize: 12, color: '#5A6A8A', marginBottom: 16 }}>
-            クレジットカードの変更・解約は近日公開の決済ページから行えるようになります。
+            Stripeの決済ページで、クレジットカード情報の入力・お支払いができます。
           </p>
-          <button
-            disabled
-            style={{ width: '100%', padding: '13px', background: '#E0E6F0', color: '#9AA5BD', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'not-allowed' }}
+          <a
+            href="https://buy.stripe.com/test_eVq8wRezBcGFa5I57T2Fa00"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'block', width: '100%', padding: '13px', background: '#0D1B3E', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}
           >
-            近日公開
-          </button>
+            Stripeで支払う
+          </a>
         </div>
       </div>
     </div>
