@@ -8,15 +8,15 @@ const BG = '#F7F8FC'
 
 const STATS = [
   { value: '毎朝', label: '自動配信' },
-  { value: '英・日', label: '対訳' },
+  { value: '7言語', label: 'から選べる' },
   { value: '5分', label: 'で読める' },
 ]
 
 const FEATURES = [
-  { icon: '🎯', title: '英語レベルに合わせて', desc: '初級〜上級まで、読み手の英語レベルに合わせて要約の難易度を自動調整します。' },
-  { icon: '⏰', title: '毎朝自動配信', desc: 'AIが毎朝ニュースを検索・要約・英日翻訳し、決まった時刻にお届けします。' },
+  { icon: '🎯', title: '学習レベルに合わせて', desc: '初級〜上級まで、読み手のレベルに合わせて要約の難易度を自動調整します。' },
+  { icon: '⏰', title: '毎朝自動配信', desc: 'AIが毎朝ニュースを検索・要約・翻訳し、決まった時刻にお届けします。' },
   { icon: '🗂️', title: 'ジャンル・件数カスタマイズ', desc: '政治・経済・テクノロジーなど興味のあるジャンルと配信件数を自由に設定できます。' },
-  { icon: '🏫', title: '塾・学校向け教材データ', desc: '英日対訳形式なので、そのまま英語の教材・授業のリーディング素材として活用できます。' },
+  { icon: '🏫', title: '塾・学校向け教材データ', desc: '対訳形式なので、そのまま語学の教材・授業のリーディング素材として活用できます。' },
 ]
 
 export default function LandingPage() {
@@ -47,14 +47,17 @@ export default function LandingPage() {
       <div style={{ background: `linear-gradient(180deg, ${BG} 0%, #fff 100%)`, padding: '72px 24px 56px', textAlign: 'center' }}>
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
           <span style={{ display: 'inline-block', fontSize: 12, fontWeight: 600, color: BLUE, background: '#EFF4FF', padding: '5px 14px', borderRadius: 20, marginBottom: 20 }}>
-            AI × ニュース × 英語教育
+            AI × ニュース × 語学学習
           </span>
-          <h1 style={{ fontSize: 40, fontWeight: 800, lineHeight: 1.35, margin: '0 0 18px' }}>
-            世界のニュースを<br />英語と日本語で<br />毎朝あなたへ
+          <h1 style={{ fontSize: 36, fontWeight: 800, lineHeight: 1.45, margin: '0 0 14px' }}>
+            生きたニュースで、<br />あなたの「学習言語」をマスター。
           </h1>
+          <p style={{ fontSize: 16, color: NAVY, fontWeight: 600, lineHeight: 1.7, margin: '0 0 18px' }}>
+            AIが選ぶ世界の一報を、日本語対訳とともに。
+          </p>
           <p style={{ fontSize: 15, color: SUBTEXT, lineHeight: 1.8, margin: '0 0 28px' }}>
-            ロイター・AP通信・BBC・NYTなど主要メディアから、AIが厳選したニュースを英日対訳で毎朝お届け。
-            メール・LINE・Webダッシュボードから、あなたに合わせたレベルで読めます。
+            ロイター・AP通信・BBC・NYTなど主要メディアから、AIが厳選したニュースを日本語対訳で毎朝お届け。
+            英語・中国語・韓国語・フランス語・スペイン語・ドイツ語など、学びたい言語を選んで、あなたに合わせたレベルで読めます。
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <button
@@ -83,7 +86,7 @@ export default function LandingPage() {
       <div style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px 72px' }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <span style={{ fontSize: 12, fontWeight: 600, color: BLUE, letterSpacing: '.08em' }}>FEATURES</span>
-          <h2 style={{ fontSize: 26, fontWeight: 700, margin: '8px 0 0' }}>英語教育にすぐ使える理由</h2>
+          <h2 style={{ fontSize: 26, fontWeight: 700, margin: '8px 0 0' }}>語学学習にすぐ使える理由</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
           {FEATURES.map(f => (
@@ -107,7 +110,7 @@ export default function LandingPage() {
               <div style={{ fontSize: 30, fontWeight: 800, marginBottom: 16 }}>¥0</div>
               <div style={{ fontSize: 13, color: SUBTEXT, lineHeight: 2 }}>
                 ・毎朝メール3件配信<br />
-                ・英日対訳ニュース<br />
+                ・多言語対訳ニュース<br />
                 ・基本ジャンル設定
               </div>
             </div>
