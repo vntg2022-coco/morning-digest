@@ -12,6 +12,8 @@ const STATS = [
   { value: '5分', label: 'で読める' },
 ]
 
+const SUPPORTED_LANGUAGES = ['英語', '中国語', '韓国語', 'フランス語', 'スペイン語', 'ドイツ語', '日本語']
+
 const FEATURES = [
   { icon: '🎯', title: '学習レベルに合わせて', desc: '初級〜上級まで、読み手のレベルに合わせて要約の難易度を自動調整します。' },
   { icon: '⏰', title: '毎朝自動配信', desc: 'AIが毎朝ニュースを検索・要約・翻訳し、決まった時刻にお届けします。' },
@@ -66,6 +68,18 @@ export default function LandingPage() {
             >
               無料で始める
             </button>
+          </div>
+
+          {/* Supported languages */}
+          <div style={{ marginTop: 36 }}>
+            <p style={{ fontSize: 11, color: SUBTEXT, fontWeight: 600, letterSpacing: '.06em', marginBottom: 10 }}>対応言語</p>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+              {SUPPORTED_LANGUAGES.map(lang => (
+                <span key={lang} style={{ fontSize: 12, fontWeight: 600, color: NAVY, background: '#fff', border: `1px solid ${BORDER}`, padding: '6px 14px', borderRadius: 20 }}>
+                  {lang}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -130,7 +144,7 @@ export default function LandingPage() {
 
       {/* Final CTA */}
       <div style={{ padding: '72px 24px', textAlign: 'center' }}>
-        <h2 style={{ fontSize: 26, fontWeight: 700, margin: '0 0 12px' }}>今日から、世界の授業を教室に。</h2>
+        <h2 style={{ fontSize: 26, fontWeight: 700, margin: '0 0 12px' }}>世界のニュースが、あなたの語学教材になる。</h2>
         <p style={{ fontSize: 14, color: SUBTEXT, margin: '0 0 28px' }}>登録は無料。数十秒で始められます。</p>
         <button
           onClick={() => router.push('/login')}
