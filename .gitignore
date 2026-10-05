@@ -12,3 +12,6 @@ out/
 .DS_Store
 *.log
 .vercel
+
+# Generated digest previews
+previews/
