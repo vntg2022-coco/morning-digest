@@ -18,7 +18,8 @@ Good Morning Digest: a language-learning news service. Users pick a native langu
 
 ## State of the code
 - The digest pipeline in `lib/` is v1 (Spanish only, 5 articles, full digest in the email); SPEC.md describes the v2 it is being replaced by. It lives in `lib/` (`news.mjs` → `summarize.mjs` → `email-template.mjs`, orchestrated by `digest.mjs`). `lib/` uses `.mjs` so the same code runs in Next.js and in plain Node scripts. `/api/cron/digest` (Vercel Cron, `vercel.json`) currently emails one test digest to `DIGEST_TEST_TO`.
-- The dashboard UI is still mock data. News items, stats, and the user name are hardcoded in `components/HomeTab.js` and `components/ArchiveTab.js`.
+- The landing page (`pages/index.js`, `components/landing/`) follows SPEC.md. The mailbox/key art in `components/landing/Mailbox.js` is a placeholder SVG to be replaced. `lib/languages.mjs` is the single list of the 12 languages.
+- Login, signup, billing and the dashboard are still the old Japanese mock UI. The dashboard uses mock data. News items, stats, and the user name are hardcoded in `components/HomeTab.js` and `components/ArchiveTab.js`.
 - Login/signup only redirect to `/dashboard`; there is no auth or DB yet.
 - `pages/billing.js` links to a Stripe **test-mode** payment link.
 
