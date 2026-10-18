@@ -47,12 +47,12 @@ export default function Collage() {
           position: absolute;
           background: #f6f0e1;
           border: 1px solid #e3d8bd;
-          box-shadow: 0 2px 6px rgba(13, 27, 62, 0.08);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
           padding: 10px 12px 12px;
           opacity: 0.75;
         }
         .masthead {
-          font-family: var(--font-serif), Georgia, serif;
+          font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
           font-size: 20px;
           font-weight: 700;
           color: #3b3324;

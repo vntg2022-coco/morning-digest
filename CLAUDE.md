@@ -13,7 +13,7 @@ Good Morning Digest: a language-learning news service. Users pick a native langu
 
 ## Stack
 - Next.js 14 Pages Router, React 18, plain JavaScript (no TypeScript yet)
-- Styling is mostly inline `style={{}}` objects; Tailwind is installed but barely used. Brand colors: navy `#0D1B3E`, accent `#2563EB`.
+- Styling is mostly inline `style={{}}` objects; Tailwind is installed but barely used. Look is modeled on the New York Times site: serif headlines `var(--font-serif)` (Source Serif 4), sans body/buttons `var(--font-sans)` (Libre Franklin), text `#121212`, black square-ish buttons, off-white `#f0eee9` backgrounds, link/accent blue `#326891`. Don't use NYT's own fonts, logo or name.
 - Deployed on Vercel from GitHub `vntg2022-coco/morning-digest`, branch `main`.
 
 ## State of the code

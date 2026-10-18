@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react'
 
-const NAVY = '#0D1B3E'
+const NAVY = '#121212'
 const BRASS = '#C9A227'
 const BRASS_DARK = '#8C6F12'
 
@@ -53,7 +53,7 @@ export default function Mailbox({ onUnlock, interactive = true, size = 300 }) {
 
       {/* name plate + slot */}
       <rect x="66" y="80" width="68" height="18" rx="3" fill={BRASS} />
-      <text x="100" y="93" textAnchor="middle" fontSize="11" fontWeight="700" fill={NAVY} fontFamily="Georgia, serif" letterSpacing="3">
+      <text x="100" y="93" textAnchor="middle" fontSize="11" fontWeight="700" fill={NAVY} fontFamily="Georgia, 'Times New Roman', serif" letterSpacing="3">
         NEWS
       </text>
       <rect x="64" y="110" width="72" height="9" rx="4.5" fill="#050B1C" stroke={BRASS} strokeWidth="1.5" />
@@ -67,7 +67,7 @@ export default function Mailbox({ onUnlock, interactive = true, size = 300 }) {
           transition: 'transform .5s ease',
         }}
       >
-        <rect x="54" y="130" width="92" height="98" rx="4" fill="#13265A" stroke={BRASS} strokeWidth="2" />
+        <rect x="54" y="130" width="92" height="98" rx="4" fill="#2b2b2b" stroke={BRASS} strokeWidth="2" />
         <circle cx="100" cy="150" r="6" fill="none" stroke={BRASS} strokeWidth="1.5" />
         <circle cx="76" cy="168" r="3" fill={BRASS} />
         <circle cx="124" cy="168" r="3" fill={BRASS} />
@@ -108,7 +108,7 @@ export default function Mailbox({ onUnlock, interactive = true, size = 300 }) {
         <rect x="4" y="2" width="5" height="7" fill={BRASS} stroke={BRASS_DARK} strokeWidth="1" />
         <rect x="12" y="2" width="4" height="5" fill={BRASS} stroke={BRASS_DARK} strokeWidth="1" />
         <circle cx="44" cy="0" r="11" fill={BRASS} stroke={BRASS_DARK} strokeWidth="1.5" />
-        <circle cx="44" cy="0" r="4.5" fill="#F7F8FC" />
+        <circle cx="44" cy="0" r="4.5" fill="#f7f7f5" />
         {/* larger invisible hit area */}
         <circle cx="30" cy="0" r="24" fill="transparent" />
       </g>
@@ -118,7 +118,7 @@ export default function Mailbox({ onUnlock, interactive = true, size = 300 }) {
           animation: gmd-wiggle 2.4s ease-in-out infinite;
         }
         :global(.gmd-key-idle:focus-visible circle:first-of-type) {
-          stroke: #2563eb;
+          stroke: #326891;
           stroke-width: 3;
         }
         @keyframes gmd-wiggle {

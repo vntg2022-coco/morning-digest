@@ -83,8 +83,8 @@ export default function WordDemo() {
         .reader,
         .vocab {
           background: #fff;
-          border: 1px solid #e0e6f0;
-          border-radius: 12px;
+          border: 1px solid #dfdfdf;
+          border-radius: 4px;
           padding: 20px;
         }
         .cols {
@@ -97,20 +97,20 @@ export default function WordDemo() {
           font-weight: 700;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: #2563eb;
+          color: #326891;
           margin-bottom: 8px;
         }
         .target {
-          font-family: var(--font-serif), Georgia, serif;
+          font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
           font-size: 19px;
           line-height: 1.7;
-          color: #0d1b3e;
+          color: #121212;
           margin: 0;
         }
         .native {
           font-size: 15px;
           line-height: 1.7;
-          color: #5a6a8a;
+          color: #5a5a5a;
           margin: 0;
         }
         .word {
@@ -120,26 +120,26 @@ export default function WordDemo() {
           border: none;
           padding: 0;
           cursor: pointer;
-          border-bottom: 2px dotted #2563eb;
+          border-bottom: 2px dotted #326891;
         }
         .word.on {
-          background: #eff4ff;
+          background: #e8eef3;
           border-bottom-style: solid;
         }
         .popup {
           margin-top: 16px;
-          background: #0d1b3e;
+          background: #121212;
           color: #fff;
-          border-radius: 10px;
+          border-radius: 4px;
           padding: 14px 16px;
         }
         .term {
-          font-family: var(--font-serif), Georgia, serif;
+          font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
           font-size: 18px;
           font-weight: 700;
         }
         .meaning {
-          color: #9eb6e8;
+          color: #cfcfcf;
           font-size: 14px;
           margin: 2px 0 8px;
         }
@@ -147,23 +147,23 @@ export default function WordDemo() {
           font-size: 14px;
         }
         .example span {
-          color: #c9d6ef;
+          color: #e2e2e2;
         }
         .vocab ul {
           list-style: none;
           padding: 0;
           margin: 0;
           font-size: 13px;
-          color: #0d1b3e;
+          color: #121212;
         }
         .vocab li {
           padding: 6px 0;
-          border-bottom: 1px solid #f0f2f7;
+          border-bottom: 1px solid #ececec;
         }
         .hint {
           margin-top: 10px;
           font-size: 11px;
-          color: #5a6a8a;
+          color: #5a5a5a;
         }
         @media (max-width: 720px) {
           .demo,

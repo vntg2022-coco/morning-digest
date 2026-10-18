@@ -60,24 +60,24 @@ export default function SampleViewer() {
         .tabs button {
           font-size: 13px;
           padding: 7px 14px;
-          border-radius: 20px;
-          border: 1px solid #e0e6f0;
+          border-radius: 3px;
+          border: 1px solid #dfdfdf;
           background: #fff;
-          color: #5a6a8a;
+          color: #5a5a5a;
           cursor: pointer;
         }
         .tabs button.on {
-          background: #0d1b3e;
-          border-color: #0d1b3e;
+          background: #121212;
+          border-color: #121212;
           color: #fff;
         }
         .paper {
           background: #fffdf6;
           border: 1px solid #e3d8bd;
-          border-radius: 12px;
+          border-radius: 4px;
           padding: 24px;
           text-align: left;
-          box-shadow: 0 6px 24px rgba(13, 27, 62, 0.06);
+          box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
         }
         .tag {
           font-size: 11px;
@@ -98,25 +98,25 @@ export default function SampleViewer() {
           font-weight: 700;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: #2563eb;
+          color: #326891;
           margin-bottom: 8px;
         }
         h3 {
-          font-family: var(--font-serif), Georgia, serif;
+          font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
           font-size: 22px;
           line-height: 1.35;
-          color: #0d1b3e;
+          color: #121212;
           margin: 0 0 12px;
         }
         p {
           font-size: 16px;
           line-height: 1.75;
-          color: #1a1a2e;
+          color: #121212;
           margin: 0 0 8px;
         }
         .native h3,
         .native p {
-          color: #5a6a8a;
+          color: #5a5a5a;
         }
         @media (max-width: 720px) {
           .cols {
