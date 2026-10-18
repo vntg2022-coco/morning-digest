@@ -15,3 +15,6 @@ out/
 
 # Generated digest previews
 previews/
+
+# Generated daily content (local dev store)
+data/

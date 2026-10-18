@@ -5,7 +5,7 @@ Good Morning Digest: a language-learning news service. Users pick a native langu
 **`docs/SPEC.md` is the agreed product spec** (plans, pricing, trial, LP sections, build order). Read it before product work and keep it updated when decisions change.
 
 ## Commands
-- `npm run digest:preview -- beginner|intermediate|advanced` — builds a real digest into `previews/` (costs one GNews + one Claude call)
+- `npm run digest:preview -- es:intermediate:en zh:beginner:ja` — builds today's content for those editions (learning:level:native), saves JSON to `data/content/`, writes tappable HTML to `previews/`. Costs real money (~$0.2 per learning×level, ~$0.1 per edition); the script prints an estimate.
 - `npm run set-key -- NAME` / `npm run check-keys` — set/verify keys in `.env.local` without printing them. Never print or log key values.
 - `npm run dev` — dev server on :3000
 - `npm run build` — run before saying a change is done; catches build errors
@@ -17,7 +17,7 @@ Good Morning Digest: a language-learning news service. Users pick a native langu
 - Deployed on Vercel from GitHub `vntg2022-coco/morning-digest`, branch `main`.
 
 ## State of the code
-- The digest pipeline in `lib/` is v1 (Spanish only, 5 articles, full digest in the email); SPEC.md describes the v2 it is being replaced by. It lives in `lib/` (`news.mjs` → `summarize.mjs` → `email-template.mjs`, orchestrated by `digest.mjs`). `lib/` uses `.mjs` so the same code runs in Next.js and in plain Node scripts. `/api/cron/digest` (Vercel Cron, `vercel.json`) currently emails one test digest to `DIGEST_TEST_TO`.
+- Content pipeline v2 lives in `lib/pipeline/`: `select.mjs` picks 3 stories a day from GNews headlines (once per day) → `write.mjs` retells each story in the learning language with tappable words + glossary (once per learning language × level, one Claude call per story) → `translate.mjs` adds the native-language translation and word meanings (once per edition = learning × level × native). `daily.mjs` orchestrates and estimates cost. `lib/store.mjs` saves to local `data/content/` for now (moves to Supabase in step 3). `reader-preview.mjs` renders a tappable HTML preview. `/api/cron/digest` builds content for `DIGEST_EDITIONS` but does not save or email yet. `lib/` uses `.mjs` so the same code runs in Next.js and plain Node scripts.
 - The landing page (`pages/index.js`, `components/landing/`) follows SPEC.md. The mailbox/key art in `components/landing/Mailbox.js` is a placeholder SVG to be replaced. `lib/languages.mjs` is the single list of the 12 languages.
 - Login, signup, billing and the dashboard are still the old Japanese mock UI. The dashboard uses mock data. News items, stats, and the user name are hardcoded in `components/HomeTab.js` and `components/ArchiveTab.js`.
 - Login/signup only redirect to `/dashboard`; there is no auth or DB yet.

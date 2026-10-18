@@ -10,7 +10,7 @@
 |---|---|
 | ランディングページ / ログイン / 新規登録 / ダッシュボード / プラン変更 | 画面のみ(データは固定のサンプル) |
 | 認証・ユーザーDB | 未実装(ログインは見た目だけ) |
-| ニュース取得・要約・配信 | `lib/` に実装済み。`npm run digest:preview` で確認可能。メール送信は Resend の設定待ち |
+| ニュース取得・記事づくり | `lib/pipeline/` に実装済み(1日3本・12言語・対訳・単語の意味)。保存は当面ローカル。メール配信は未実装 |
 | 決済 | Stripe のテスト用決済リンクをコードに直接記載 |
 
 ## 予定している構成
@@ -40,7 +40,7 @@ npm run dev                  # http://localhost:3000
 | `npm run dev` | 開発サーバー |
 | `npm run build` | 本番ビルド(デプロイ前にエラーがないか確認) |
 | `npm run lint` | ESLint |
-| `npm run digest:preview -- intermediate` | 実際のニュースで要約を作り `previews/` にHTMLを出力(beginner / intermediate / advanced) |
+| `npm run digest:preview -- es:intermediate:en` | 実際のニュースで今日の記事を作り、`previews/` にタップできるHTMLを出力(学習言語:レベル:母国語、複数指定可) |
 | `npm run set-key -- 変数名` | `.env.local` にキーを画面に表示せず保存 |
 | `npm run check-keys` | キーが有効か確認(値は表示しない) |
 

@@ -1,18 +1,30 @@
-// Builds a real digest and writes it to previews/ so you can open it in a browser.
-// Usage: npm run digest:preview -- [beginner|intermediate|advanced]
-// Costs one GNews request and one Claude request.
+// Builds today's content for the given editions, saves it under data/content/,
+// and writes a tappable HTML preview per edition to previews/.
+//
+// Usage: npm run digest:preview -- es:intermediate:en zh:beginner:ja
+//        (learning language : level : native language)
+// Costs one GNews request plus Claude calls (cost estimate is printed).
 
 import { mkdir, writeFile } from 'node:fs/promises'
-import { buildDigest } from '../lib/digest.mjs'
+import { buildDailyContent, parseEdition } from '../lib/pipeline/daily.mjs'
+import { renderEditionPreview } from '../lib/pipeline/reader-preview.mjs'
+import { saveDailyContent } from '../lib/store.mjs'
 
-const level = process.argv[2] ?? 'intermediate'
-const { digest, subject, html } = await buildDigest({ level })
+const args = process.argv.slice(2)
+const editions = (args.length ? args : ['es:intermediate:en']).map(parseEdition)
+
+const started = Date.now()
+const content = await buildDailyContent({ editions })
+const dir = await saveDailyContent(content)
 
 await mkdir('previews', { recursive: true })
-const file = `previews/digest-${level}.html`
-await writeFile(file, html)
+for (const [key, edition] of Object.entries(content.editions)) {
+  const file = `previews/${content.date}-${key}.html`
+  await writeFile(file, renderEditionPreview(edition, content.date))
+  console.log(`Wrote ${file}`)
+}
 
-console.log(`Subject: ${subject}`)
-console.log(`Articles: ${digest.articles.length}`)
-console.log(`Tokens: ${digest.usage.input_tokens} in / ${digest.usage.output_tokens} out`)
-console.log(`Wrote ${file}`)
+console.log(`Stories: ${content.stories.map(s => `[${s.topic}] ${s.title}`).join('\n         ')}`)
+console.log(`Saved JSON to ${dir}`)
+console.log(`Tokens: ${content.usage.input} in / ${content.usage.output} out ≈ $${content.usage.estimatedCostUsd}`)
+console.log(`Took ${Math.round((Date.now() - started) / 1000)}s`)
