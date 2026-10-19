@@ -24,6 +24,7 @@ case "$name" in
   SUPABASE_SECRET_KEY) expected="sb_secret_" ;;
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) expected="sb_publishable_" ;;
   NEXT_PUBLIC_SUPABASE_URL) expected="https://" ;;
+  SUPABASE_ACCESS_TOKEN) expected="sbp_" ;;
   *) expected="" ;;
 esac
 if [[ -n "$expected" && "$value" != "$expected"* ]]; then
