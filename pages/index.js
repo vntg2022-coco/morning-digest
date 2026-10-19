@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -38,6 +38,12 @@ export default function LandingPage() {
   const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
   const goSignup = useCallback(() => router.push('/signup'), [router])
+
+  // If Supabase sends an email-confirmation link back to the site root, finish it there.
+  useEffect(() => {
+    const { code } = router.query
+    if (code) router.replace(`/auth/callback?code=${encodeURIComponent(code)}`)
+  }, [router])
 
   return (
     <div className="page">

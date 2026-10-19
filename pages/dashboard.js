@@ -1,38 +1,85 @@
-import { useState } from 'react'
-import Sidebar from '../components/Sidebar'
-import HomeTab from '../components/HomeTab'
-import ArchiveTab from '../components/ArchiveTab'
-import SettingsTab from '../components/SettingsTab'
+// Signed-in home. For now it confirms the reader's setup; the News box reader
+// with today's stories replaces this in build step 4.
 
-const TAB_TITLES = {
-  home: '📰 今日のニュース',
-  archive: '📂 アーカイブ',
-  settings: '⚙️ 配信設定',
+import { useRouter } from 'next/router'
+import AuthLayout from '../components/AuthLayout'
+import { LANGUAGE_BY_CODE } from '../lib/languages.mjs'
+import { PLANS, currentPlan } from '../lib/plans.mjs'
+import { getSupabaseBrowser } from '../lib/supabase/browser'
+import { requireUser } from '../lib/supabase/server'
+
+export async function getServerSideProps(ctx) {
+  const auth = await requireUser(ctx)
+  if (auth.redirect) return auth
+  if (!auth.profile?.onboarded_at) return { redirect: { destination: '/onboarding', permanent: false } }
+  return { props: { email: auth.user.email, profile: auth.profile, languages: auth.languages } }
 }
 
-export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState('home')
+function formatTime(t) {
+  const [h, m] = t.split(':').map(Number)
+  return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`
+}
+
+export default function Dashboard({ email, profile, languages }) {
+  const router = useRouter()
+  const plan = currentPlan(profile)
+  const trialEnds = new Date(profile.trial_ends_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+
+  async function logOut() {
+    await getSupabaseBrowser().auth.signOut()
+    router.push('/')
+  }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F7F8FC' }}>
-      <Sidebar active={activeTab} onNav={setActiveTab} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        {/* Topbar */}
-        <div style={{ background: '#fff', borderBottom: '1px solid #E0E6F0', padding: '0 28px', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 10 }}>
-          <div style={{ fontSize: 15, fontWeight: 600, color: '#0D1B3E' }}>{TAB_TITLES[activeTab]}</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 11, fontWeight: 600, background: '#EFF4FF', color: '#2563EB', padding: '4px 10px', borderRadius: 20 }}>Premium</span>
-            <div style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid #E0E6F0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 15 }}>🔔</div>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div style={{ flex: 1, overflowY: 'auto' }}>
-          {activeTab === 'home' && <HomeTab />}
-          {activeTab === 'archive' && <ArchiveTab />}
-          {activeTab === 'settings' && <SettingsTab />}
-        </div>
-      </div>
-    </div>
+    <AuthLayout title="You're all set" subtitle={`Your first stories arrive tomorrow at ${formatTime(profile.delivery_time)}.`}>
+      <dl>
+        <dt>Account</dt>
+        <dd>{email}</dd>
+        <dt>Plan</dt>
+        <dd>
+          {PLANS[plan].label}
+          {plan === 'trial' && ` — ends ${trialEnds}`}
+        </dd>
+        <dt>Native language</dt>
+        <dd>{LANGUAGE_BY_CODE[profile.native_lang]?.name}</dd>
+        <dt>Learning</dt>
+        <dd>
+          {languages.map(l => `${LANGUAGE_BY_CODE[l.lang]?.name} (${l.level})`).join(', ')}
+        </dd>
+        <dt>Delivery</dt>
+        <dd>
+          {formatTime(profile.delivery_time)} · {profile.timezone.replace(/_/g, ' ')}
+        </dd>
+      </dl>
+      <button type="button" className="btn" onClick={logOut}>
+        Log out
+      </button>
+      <style jsx>{`
+        dl {
+          background: #fff;
+          border: 1px solid #dfdfdf;
+          border-radius: 4px;
+          padding: 8px 20px;
+          margin: 0;
+        }
+        dt {
+          font-size: 12px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+          color: #5a5a5a;
+          margin-top: 14px;
+        }
+        dd {
+          margin: 4px 0 14px;
+          padding-bottom: 14px;
+          border-bottom: 1px solid #f0f0f0;
+          font-size: 16px;
+        }
+        dd:last-child {
+          border-bottom: none;
+        }
+      `}</style>
+    </AuthLayout>
   )
 }

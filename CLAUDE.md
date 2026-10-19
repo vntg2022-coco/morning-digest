@@ -19,9 +19,9 @@ Good Morning Digest: a language-learning news service. Users pick a native langu
 ## State of the code
 - Content pipeline v2 lives in `lib/pipeline/`: `select.mjs` picks 3 stories a day from GNews headlines (once per day) → `write.mjs` retells each story in the learning language with tappable words + glossary (once per learning language × level, one Claude call per story) → `translate.mjs` adds the native-language translation and word meanings (once per edition = learning × level × native). `daily.mjs` orchestrates and estimates cost. `lib/store.mjs` saves to local `data/content/` for now (moves to Supabase in step 3). `reader-preview.mjs` renders a tappable HTML preview. `/api/cron/digest` builds content for `DIGEST_EDITIONS` but does not save or email yet. `lib/` uses `.mjs` so the same code runs in Next.js and plain Node scripts.
 - The landing page (`pages/index.js`, `components/landing/`) follows SPEC.md. The mailbox/key art in `components/landing/Mailbox.js` is a placeholder SVG to be replaced. `lib/languages.mjs` is the single list of the 12 languages.
-- Login, signup, billing and the dashboard are still the old Japanese mock UI. The dashboard uses mock data. News items, stats, and the user name are hardcoded in `components/HomeTab.js` and `components/ArchiveTab.js`.
-- Login/signup only redirect to `/dashboard`; there is no auth or DB yet.
-- `pages/billing.js` links to a Stripe **test-mode** payment link.
+- Supabase (project ref `mkrgkeotacpqcainvfyk`): schema in `supabase/migrations/*.sql`, applied with `npm run db:migrate` (Management API, needs `SUPABASE_ACCESS_TOKEN`). Never edit an applied migration; add a new numbered file. RLS is on everywhere: the browser can read/update only its own profile and settings; content, picks, vocab and adding languages go through API routes using `createSupabaseAdmin()` after checking the user and plan (`lib/plans.mjs`).
+- Auth: email + password via Supabase Auth with cookie sessions (`lib/supabase/`). `/signup` → email link → `/auth/callback` → `/onboarding` (native language, first learning language + level, time zone, delivery time; `/api/onboarding`) → `/dashboard`. Pages that need a user call `requireUser(ctx)` in getServerSideProps.
+- `/dashboard` only shows the reader's settings for now; the News box reader is build step 4. Billing (Stripe) is build step 6; the old test-mode billing page was removed.
 
 ## Rules
 - Secrets go in `.env.local` (gitignored). Add every new variable to `.env.example`.
