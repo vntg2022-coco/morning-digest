@@ -8,7 +8,7 @@ Good Morning Digest: a language-learning news service. Users pick a native langu
 - `npm run digest:preview -- es:intermediate:en zh:beginner:ja` — builds today's content for those editions (learning:level:native), saves JSON to `data/content/`, writes tappable HTML to `previews/`. Costs real money (~$0.2 per learning×level, ~$0.1 per edition); the script prints an estimate.
 - `npm run set-key -- NAME` / `npm run check-keys` — set/verify keys in `.env.local` without printing them. Never print or log key values.
 - `npm run dev` — dev server on :3000
-- `npm run build` — run before saying a change is done; catches build errors
+- `npm run verify` — lint + production build into `.next-verify/`; run before saying a change is done. Use this instead of `npm run build` while the dev server is running (a plain build overwrites the dev server's `.next`).
 - `npm run lint` — ESLint (next/core-web-vitals)
 
 ## Stack
@@ -21,7 +21,7 @@ Good Morning Digest: a language-learning news service. Users pick a native langu
 - The landing page (`pages/index.js`, `components/landing/`) follows SPEC.md. The mailbox/key art in `components/landing/Mailbox.js` is a placeholder SVG to be replaced. `lib/languages.mjs` is the single list of the 12 languages.
 - Supabase (project ref `mkrgkeotacpqcainvfyk`): schema in `supabase/migrations/*.sql`, applied with `npm run db:migrate` (Management API, needs `SUPABASE_ACCESS_TOKEN`). Never edit an applied migration; add a new numbered file. RLS is on everywhere: the browser can read/update only its own profile and settings; content, picks, vocab and adding languages go through API routes using `createSupabaseAdmin()` after checking the user and plan (`lib/plans.mjs`).
 - Auth: email + password via Supabase Auth with cookie sessions (`lib/supabase/`). `/signup` → email link → `/auth/callback` → `/onboarding` (native language, first learning language + level, time zone, delivery time; `/api/onboarding`) → `/dashboard`. Pages that need a user call `requireUser(ctx)` in getServerSideProps.
-- `/dashboard` only shows the reader's settings for now; the News box reader is build step 4. Billing (Stripe) is build step 6; the old test-mode billing page was removed.
+- Reader (News box): `/dashboard` (today's 3 stories; Standard picks 1 via `/api/pick`), `/read/[id]` (side-by-side reader, `components/Reader.js`, tap a word → meaning; Premium saves to vocab via `/api/vocab`), `/archive`, `/vocab`, `/settings` (`/api/settings`: delivery, native language, add/remove languages within `languageLimit`). Who may open a story is decided only in `lib/access.mjs` (`storyAccess`), server-side. Content queries live in `lib/store.mjs`. Billing (Stripe) is build step 6.
 
 ## Rules
 - Secrets go in `.env.local` (gitignored). Add every new variable to `.env.example`.

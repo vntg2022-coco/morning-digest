@@ -18,3 +18,4 @@ previews/
 
 # Generated daily content (local dev store)
 data/
+.next-verify/

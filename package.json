@@ -10,7 +10,8 @@
     "set-key": "zsh scripts/set-key.sh",
     "check-keys": "zsh scripts/check-keys.sh",
     "digest:preview": "node --env-file=.env.local scripts/preview-digest.mjs",
-    "db:migrate": "node --env-file=.env.local scripts/db-migrate.mjs"
+    "db:migrate": "node --env-file=.env.local scripts/db-migrate.mjs",
+    "verify": "npm run lint && NEXT_DIST_DIR=.next-verify next build --no-lint"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
