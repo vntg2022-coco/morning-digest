@@ -2,7 +2,7 @@
 //   PATCH  { nativeLang, timezone, deliveryTime }
 //   POST   { lang, level }                 add a learning language (plan limit applies)
 //   PUT    { lang, level }                 change the level of a learning language
-//   DELETE { lang }                        remove a learning language (keeps at least one)
+// Learning languages can't be removed once chosen (docs/SPEC.md).
 
 import { LANGUAGE_BY_CODE } from '../../lib/languages.mjs'
 import { languageLimit } from '../../lib/plans.mjs'
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
   const db = adminDb()
   const { data: profile } = await db.from('profiles').select('*').eq('id', user.id).single()
-  const { data: languages } = await db.from('learning_languages').select('lang, level, purchased').eq('user_id', user.id)
+  const { data: languages } = await db.from('learning_languages').select('lang, level, purchased, created_at').eq('user_id', user.id)
   const body = req.body ?? {}
 
   if (req.method === 'PATCH') {
@@ -54,14 +54,6 @@ export default async function handler(req, res) {
   if (req.method === 'PUT') {
     if (!isLevel(body.level)) return res.status(400).json({ error: 'Choose your level.' })
     const { error } = await db.from('learning_languages').update({ level: body.level }).eq('user_id', user.id).eq('lang', body.lang)
-    if (error) return res.status(500).json({ error: error.message })
-    return res.status(200).json({ ok: true })
-  }
-
-  if (req.method === 'DELETE') {
-    if (languages.length <= 1) return res.status(400).json({ error: 'Keep at least one learning language.' })
-    if (existing.purchased) return res.status(400).json({ error: 'Purchased languages can’t be removed.' })
-    const { error } = await db.from('learning_languages').delete().eq('user_id', user.id).eq('lang', body.lang)
     if (error) return res.status(500).json({ error: error.message })
     return res.status(200).json({ ok: true })
   }

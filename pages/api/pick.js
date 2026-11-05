@@ -1,7 +1,7 @@
 // Standard plan: records the one story a reader chooses for a day.
 // The primary key (user, date, language) makes the choice final.
 
-import { PLANS, currentPlan } from '../../lib/plans.mjs'
+import { PLANS, activeLanguageCodes, currentPlan } from '../../lib/plans.mjs'
 import { adminDb } from '../../lib/store.mjs'
 import { createSupabaseServer } from '../../lib/supabase/server'
 
@@ -24,8 +24,10 @@ export default async function handler(req, res) {
   const { data: article } = await db.from('articles').select('lang, stories!inner(id, date)').eq('id', articleId).single()
   if (!article) return res.status(404).json({ error: 'Unknown story.' })
 
-  const { data: owned } = await db.from('learning_languages').select('lang').eq('user_id', user.id).eq('lang', article.lang)
-  if (!owned?.length) return res.status(403).json({ error: 'That story is not in one of your languages.' })
+  const { data: languages } = await db.from('learning_languages').select('lang, purchased, created_at').eq('user_id', user.id)
+  if (!activeLanguageCodes(profile, languages ?? []).has(article.lang)) {
+    return res.status(403).json({ error: 'That story is not in one of your active languages.' })
+  }
 
   const { error } = await db
     .from('article_picks')

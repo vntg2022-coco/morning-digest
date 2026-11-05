@@ -83,6 +83,8 @@ export default function Onboarding() {
           ))}
         </select>
 
+        <p className="fine">You can add more languages later, but a language can&apos;t be removed once you choose it.</p>
+
         <label id="level-label">Your level</label>
         <div className="levels" role="radiogroup" aria-labelledby="level-label">
           {LEVELS.map(l => (
@@ -129,6 +131,11 @@ export default function Onboarding() {
         </button>
       </form>
       <style jsx>{`
+        .fine {
+          font-size: 13px;
+          color: #5a5a5a;
+          margin: 6px 0 0;
+        }
         .levels {
           display: grid;
           grid-template-columns: repeat(3, 1fr);

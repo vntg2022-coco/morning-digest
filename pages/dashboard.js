@@ -16,7 +16,7 @@ export async function getServerSideProps(ctx) {
   if (reader.redirect) return reader
   const { profile, plan, languages, selected } = reader
 
-  const edition = selected
+  const edition = selected && !selected.paused
     ? await latestEdition({ lang: selected.lang, level: selected.level, native: profile.native_lang })
     : null
   const picks = selected && edition ? await getPicks(reader.user.id, selected.lang) : {}
@@ -85,7 +85,15 @@ export default function NewsBox({ plan, trialEndsAt, deliveryTime, nativeLang, l
         <p className="banner warn">Your free trial has ended. Choose a plan to keep reading (coming soon).</p>
       )}
 
-      {!date ? (
+      {selected?.paused ? (
+        <div className="empty">
+          <h1>{lang.name} is paused</h1>
+          <p>
+            Your current plan includes fewer languages, so new {lang.name} stories are paused. Your {lang.name} archive and vocab list are
+            still here. Upgrade to Premium or add {lang.name} for a one-time $4.99 to get new stories again (coming soon).
+          </p>
+        </div>
+      ) : !date ? (
         <div className="empty">
           <h1>Your first stories are on their way</h1>
           <p>They arrive every morning at {formatTime(deliveryTime)}. We&apos;ll email you when they&apos;re here.</p>

@@ -109,7 +109,7 @@ export default function Settings(props) {
       <section>
         <h2>Learning languages</h2>
         <p className="sub">
-          {languages.length} of {limit} on your plan
+          {languages.length} of {limit} on your plan. Languages stay on your account once added; you can change their level anytime.
         </p>
         <ul className="langs">
           {languages.map(l => (
@@ -122,11 +122,8 @@ export default function Settings(props) {
                   </option>
                 ))}
               </select>
-              {languages.length > 1 && !l.purchased && (
-                <button type="button" className="link" onClick={() => run('DELETE', { lang: l.lang }, 'Language removed.')}>
-                  Remove
-                </button>
-              )}
+              {l.purchased && <span className="tag">Add-on</span>}
+              {l.paused && <span className="tag">Paused on your plan</span>}
             </li>
           ))}
         </ul>
@@ -155,7 +152,11 @@ export default function Settings(props) {
               type="button"
               className="btn"
               disabled={!newLang}
-              onClick={() => run('POST', { lang: newLang, level: newLevel }, 'Language added. Its stories start with the next morning edition.').then(() => setNewLang(''))}
+              onClick={() => {
+                const name = LANGUAGE_BY_CODE[newLang].name
+                if (!window.confirm(`Add ${name}? Learning languages can't be removed later.`)) return
+                run('POST', { lang: newLang, level: newLevel }, `${name} added. Its stories start with the next morning edition.`).then(() => setNewLang(''))
+              }}
             >
               Add
             </button>
@@ -249,14 +250,12 @@ export default function Settings(props) {
           min-width: 140px;
           font-weight: 600;
         }
-        .link {
-          background: none;
-          border: none;
-          font: inherit;
-          font-size: 14px;
+        .tag {
+          font-size: 12px;
           color: #5a5a5a;
-          text-decoration: underline;
-          cursor: pointer;
+          border: 1px solid #dfdfdf;
+          border-radius: 3px;
+          padding: 2px 8px;
         }
         .add {
           display: flex;
