@@ -9,38 +9,37 @@ export function getServerSideProps() {
   return { props: {} }
 }
 
+// Two plan languages plus one purchased add-on.
 const SAMPLE = [
   { lang: 'es', level: 'intermediate', purchased: false },
   { lang: 'en', level: 'advanced', purchased: false },
-  { lang: 'fr', level: 'beginner', purchased: false },
-  { lang: 'de', level: 'beginner', purchased: false },
+  { lang: 'fr', level: 'beginner', purchased: true },
 ]
+const PLANS = { standard: { label: 'Standard', base: 1, all: false }, premium: { label: 'Premium', base: 2, all: true } }
 
 export default function LanguageListPlayground() {
   const [languages, setLanguages] = useState(SAMPLE)
-  const [slots, setSlots] = useState(3)
-  const [cooldown, setCooldown] = useState(false)
+  const [plan, setPlan] = useState('standard')
+  const capacity = PLANS[plan].base + languages.filter(l => l.purchased).length
   const [log, setLog] = useState([])
   const note = text => setLog(l => [text, ...l].slice(0, 6))
 
   return (
     <main style={{ maxWidth: 640, margin: '40px auto', padding: '0 16px', fontFamily: 'var(--font-sans), sans-serif' }}>
       <p>
-        Slots:{' '}
-        {[1, 3].map(n => (
-          <button key={n} type="button" onClick={() => setSlots(n)} style={{ fontWeight: slots === n ? 700 : 400, marginRight: 8 }}>
-            {n === 1 ? 'Standard (1)' : 'Premium (3)'}
+        Plan:{' '}
+        {Object.entries(PLANS).map(([key, p]) => (
+          <button key={key} type="button" onClick={() => setPlan(key)} style={{ fontWeight: plan === key ? 700 : 400, marginRight: 8 }}>
+            {p.label}
           </button>
         ))}
-        <label style={{ marginLeft: 12 }}>
-          <input type="checkbox" checked={cooldown} onChange={e => setCooldown(e.target.checked)} /> swap cooldown active
-        </label>
       </p>
       <LanguageList
         languages={languages}
-        slots={slots}
+        capacity={capacity}
+        delivered={PLANS[plan].all ? capacity : 1}
+        addOnPrice="$4.99"
         nativeLang="ja"
-        nextSwap={cooldown ? new Date(Date.now() + 20 * 864e5).toISOString() : null}
         onReorder={order => {
           setLanguages(order.map(lang => languages.find(l => l.lang === lang)))
           note(`reorder → ${order.join(', ')}`)

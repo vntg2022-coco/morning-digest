@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import AppLayout from '../components/AppLayout'
 import LanguageList from '../components/LanguageList'
 import { LANGUAGES } from '../lib/languages.mjs'
-import { PLANS, languageSlots, nextSwapAt } from '../lib/plans.mjs'
+import { ADD_ON_PRICE, PLANS, deliveredCount, listCapacity } from '../lib/plans.mjs'
 import { loadReader } from '../lib/reader-context'
 
 const TIMES = Array.from({ length: 11 }, (_, i) => {
@@ -28,15 +28,15 @@ export async function getServerSideProps(ctx) {
       timezone: profile.timezone,
       deliveryTime: profile.delivery_time.slice(0, 5),
       languages,
-      slots: languageSlots(profile, languages),
-      nextSwap: nextSwapAt(profile)?.toISOString() ?? null,
+      capacity: listCapacity(profile, languages),
+      delivered: deliveredCount(profile, languages),
     },
   }
 }
 
 export default function Settings(props) {
   const router = useRouter()
-  const { email, plan, trialEndsAt, previewEndsAt, languages, slots, nextSwap } = props
+  const { email, plan, trialEndsAt, previewEndsAt, languages, capacity, delivered } = props
   const [nativeLang, setNativeLang] = useState(props.nativeLang)
   const [timezone, setTimezone] = useState(props.timezone)
   const [deliveryTime, setDeliveryTime] = useState(props.deliveryTime)
@@ -108,9 +108,10 @@ export default function Settings(props) {
         <h2>Learning languages</h2>
         <LanguageList
           languages={languages}
-          slots={slots}
+          capacity={capacity}
+          delivered={delivered}
+          addOnPrice={ADD_ON_PRICE}
           nativeLang={props.nativeLang}
-          nextSwap={nextSwap}
           onReorder={order => send('POST', { action: 'reorder', order })}
           onLevel={(lang, level) => send('POST', { action: 'level', lang, level })}
           onAdd={(lang, level) => send('POST', { action: 'add', lang, level })}

@@ -23,7 +23,7 @@ const PLANS = [
     name: 'Premium',
     price: '$9.99',
     featured: true,
-    features: ['Read all 3 stories every day', 'Up to 3 learning languages', 'Personal vocab list', 'Full archive of past stories'],
+    features: ['Read all 3 stories every day', '2 learning languages, both delivered daily', 'Personal vocab list', 'Full archive of past stories'],
   },
 ]
 

@@ -83,7 +83,7 @@ export default function Onboarding() {
           ))}
         </select>
 
-        <p className="fine">You can add more languages later. Swapping a language for another is possible once every 30 days.</p>
+        <p className="fine">Premium includes 2 languages, and you can add more later for a one-time $4.99 each. Languages stay on your list once added.</p>
 
         <label id="level-label">Your level</label>
         <div className="levels" role="radiogroup" aria-labelledby="level-label">

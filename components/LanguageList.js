@@ -1,17 +1,17 @@
 // One ordered list of learning languages, modeled on the macOS "Preferred
-// Languages" list. The top `slots` rows are active (the first is Primary); the
-// rows below are paused. Drag a row up or down to reorder (mouse or touch, via
-// pointer events); with the keyboard, focus a row and press Alt+↑ / Alt+↓.
-// "+" adds a language. There is no "−": languages are never deleted.
+// Languages" list. `capacity` is how many languages the list holds (plan +
+// add-ons); the top `delivered` rows get stories each morning (all of them on
+// Premium, only the top one on Standard). Drag a row to reorder (mouse or
+// touch, via pointer events); with the keyboard, focus a row and press
+// Alt+↑ / Alt+↓. "+" adds a language. There is no "−": languages are never deleted.
 
 import { useEffect, useRef, useState } from 'react'
 import { LANGUAGE_BY_CODE, LANGUAGES } from '../lib/languages.mjs'
 
 const LEVELS = ['beginner', 'intermediate', 'advanced']
 const cap = s => s[0].toUpperCase() + s.slice(1)
-const fmt = d => new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
 
-export default function LanguageList({ languages, slots, nativeLang, nextSwap, onReorder, onLevel, onAdd }) {
+export default function LanguageList({ languages, capacity, delivered, addOnPrice, nativeLang, onReorder, onLevel, onAdd }) {
   const listRef = useRef(null)
   const [order, setOrder] = useState(languages.map(l => l.lang))
   const [drag, setDrag] = useState(null) // { lang, startY, dy, rowHeight, from }
@@ -19,29 +19,18 @@ export default function LanguageList({ languages, slots, nativeLang, nextSwap, o
   const [newLang, setNewLang] = useState('')
   const [newLevel, setNewLevel] = useState('intermediate')
 
-  // Follow the server's order after each save (or a refused swap).
+  // Follow the server's order after each save.
   const serverOrder = languages.map(l => l.lang).join(',')
   useEffect(() => setOrder(serverOrder ? serverOrder.split(',') : []), [serverOrder])
 
   const byLang = Object.fromEntries(languages.map(l => [l.lang, l]))
-  const activeCount = Math.min(slots, order.length)
-  const freeSlots = Math.max(0, slots - order.length)
+  const freeSlots = Math.max(0, capacity - order.length)
   const addable = LANGUAGES.filter(l => l.code !== nativeLang && !order.includes(l.code))
 
   // Where the dragged row would land, given how far it has moved.
   const targetIndex = d => Math.max(0, Math.min(order.length - 1, d.from + Math.round(d.dy / d.rowHeight)))
 
   function commit(next) {
-    const before = new Set(order.slice(0, slots))
-    const pausing = [...before].filter(l => !next.slice(0, slots).includes(l))
-    if (pausing.length) {
-      const names = pausing.map(l => LANGUAGE_BY_CODE[l].name).join(', ')
-      if (nextSwap) {
-        window.alert(`Swaps are limited to once every 30 days. Your next swap is available on ${fmt(nextSwap)}.`)
-        return
-      }
-      if (!window.confirm(`${names} will be paused (no new stories; archive and vocab list stay). You can swap again in 30 days. Continue?`)) return
-    }
     setOrder(next)
     onReorder(next)
   }
@@ -89,14 +78,14 @@ export default function LanguageList({ languages, slots, nativeLang, nextSwap, o
       <ul ref={listRef} role="listbox" aria-label="Learning languages, in order">
         {order.map((lang, i) => {
           const l = byLang[lang]
-          const status = i === 0 ? 'Primary' : i < slots ? 'Active' : 'Paused'
+          const status = i < delivered ? (i === 0 ? 'Primary' : 'Active') : 'Not delivered'
           return (
             <li
               key={lang}
               role="option"
               aria-selected={false}
               tabIndex={0}
-              className={`row ${i >= slots ? 'paused' : ''} ${i === activeCount - 1 && order.length > slots ? 'cut' : ''} ${drag?.lang === lang ? 'dragging' : ''}`}
+              className={`row ${i >= delivered ? 'paused' : ''} ${i === delivered - 1 && order.length > delivered ? 'cut' : ''} ${drag?.lang === lang ? 'dragging' : ''}`}
               style={{ transform: `translateY(${offset(i, lang)}px)`, transition: drag?.lang === lang ? 'none' : 'transform .15s' }}
               onPointerDown={e => onPointerDown(e, lang)}
               onPointerMove={onPointerMove}
@@ -130,7 +119,7 @@ export default function LanguageList({ languages, slots, nativeLang, nextSwap, o
         })}
         {Array.from({ length: freeSlots }, (_, i) => (
           <li key={`free-${i}`} className="row free">
-            Empty slot
+            Empty — add a language with +
           </li>
         ))}
       </ul>
@@ -175,7 +164,7 @@ export default function LanguageList({ languages, slots, nativeLang, nextSwap, o
             className="plus"
             aria-label="Add a language"
             disabled={freeSlots === 0 || addable.length === 0}
-            title={freeSlots === 0 ? 'All slots are in use' : 'Add a language'}
+            title={freeSlots === 0 ? 'Your list is full' : 'Add a language'}
             onClick={() => setAdding(true)}
           >
             +
@@ -184,10 +173,12 @@ export default function LanguageList({ languages, slots, nativeLang, nextSwap, o
       )}
 
       <p className="note">
-        Drag to reorder. The top {slots === 1 ? 'language gets' : `${slots} languages get`} new stories every morning; languages below the line
-        are paused, but their archive and vocab list stay. Pausing a language is limited to once every 30 days
-        {nextSwap ? ` (next: ${fmt(nextSwap)})` : ''}.
-        {freeSlots === 0 && ' To learn more languages at once, upgrade or add a slot for a one-time $4.99 (coming soon).'}
+        {delivered === 1 && order.length > 1
+          ? 'Your stories come in the language at the top. Drag another language to the top to switch, as often as you like.'
+          : delivered > 1
+            ? 'Every language on your list gets new stories each morning. Drag to change the order.'
+            : 'Drag to change the order.'}{' '}
+        {freeSlots === 0 && `Want another language? Add one for a one-time ${addOnPrice} (coming soon).`}
       </p>
 
       <style jsx>{`

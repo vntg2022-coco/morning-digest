@@ -143,10 +143,10 @@ export default function NewsBox({ plan, savedPlan, preparing, trialEndsAt, previ
 
       {selected?.paused ? (
         <div className="empty">
-          <h1>{lang.name} is paused</h1>
+          <h1>No new {lang.name} stories right now</h1>
           <p>
-            Paused languages get no new stories. Your {lang.name} archive and vocab list are still here. To get new {lang.name} stories, move it
-            back to your main languages in Settings.
+            Your plan delivers the language at the top of your list. To read {lang.name}, drag it to the top in Settings; you can switch as
+            often as you like. Your {lang.name} archive and vocab list are still here.
           </p>
         </div>
       ) : preparing ? (
