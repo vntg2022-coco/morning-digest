@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import AppLayout from '../components/AppLayout'
-import LanguageSlots from '../components/LanguageSlots'
+import LanguageList from '../components/LanguageList'
 import { LANGUAGES } from '../lib/languages.mjs'
 import { PLANS, languageSlots, nextSwapAt } from '../lib/plans.mjs'
 import { loadReader } from '../lib/reader-context'
@@ -106,12 +106,14 @@ export default function Settings(props) {
 
       <section>
         <h2>Learning languages</h2>
-        <LanguageSlots
+        <LanguageList
           languages={languages}
           slots={slots}
           nativeLang={props.nativeLang}
           nextSwap={nextSwap}
-          onAction={body => send('POST', body)}
+          onReorder={order => send('POST', { action: 'reorder', order })}
+          onLevel={(lang, level) => send('POST', { action: 'level', lang, level })}
+          onAdd={(lang, level) => send('POST', { action: 'add', lang, level })}
         />
       </section>
 

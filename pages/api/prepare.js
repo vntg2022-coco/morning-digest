@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   const db = adminDb()
   const { data: profile } = await db.from('profiles').select('*').eq('id', user.id).single()
   if (!profile?.onboarded_at || currentPlan(profile) === 'inactive') return res.status(200).json({ ready: true, editions: 0 })
-  const { data: languages } = await db.from('learning_languages').select('lang, level, purchased, active, created_at').eq('user_id', user.id)
+  const { data: languages } = await db.from('learning_languages').select('lang, level, purchased, active, sort_order, created_at').eq('user_id', user.id)
   const active = activeLanguageCodes(profile, languages)
   const editions = languages.filter(l => active.has(l.lang)).map(l => ({ lang: l.lang, level: l.level, native: profile.native_lang }))
 

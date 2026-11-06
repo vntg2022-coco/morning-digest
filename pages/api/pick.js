@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   const { data: article } = await db.from('articles').select('lang, stories!inner(id, date)').eq('id', articleId).single()
   if (!article) return res.status(404).json({ error: 'Unknown story.' })
 
-  const { data: languages } = await db.from('learning_languages').select('lang, purchased, active, created_at').eq('user_id', user.id)
+  const { data: languages } = await db.from('learning_languages').select('lang, purchased, active, sort_order, created_at').eq('user_id', user.id)
   if (!activeLanguageCodes(profile, languages ?? []).has(article.lang)) {
     return res.status(403).json({ error: 'That story is not in one of your active languages.' })
   }
