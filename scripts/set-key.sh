@@ -25,6 +25,7 @@ case "$name" in
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) expected="sb_publishable_" ;;
   NEXT_PUBLIC_SUPABASE_URL) expected="https://" ;;
   SUPABASE_ACCESS_TOKEN) expected="sbp_" ;;
+  RESEND_API_KEY) expected="re_" ;;
   *) expected="" ;;
 esac
 if [[ -n "$expected" && "$value" != "$expected"* ]]; then

@@ -27,6 +27,7 @@ export async function getServerSideProps(ctx) {
       nativeLang: profile.native_lang,
       timezone: profile.timezone,
       deliveryTime: profile.delivery_time.slice(0, 5),
+      emailEnabled: profile.email_enabled,
       languages,
       capacity: listCapacity(profile, languages),
       delivered: deliveredCount(profile, languages),
@@ -40,6 +41,7 @@ export default function Settings(props) {
   const [nativeLang, setNativeLang] = useState(props.nativeLang)
   const [timezone, setTimezone] = useState(props.timezone)
   const [deliveryTime, setDeliveryTime] = useState(props.deliveryTime)
+  const [emailEnabled, setEmailEnabled] = useState(props.emailEnabled)
   const [zones, setZones] = useState([props.timezone])
   const [message, setMessage] = useState(null)
 
@@ -99,7 +101,15 @@ export default function Settings(props) {
             </select>
           </label>
         </div>
-        <button type="button" className="btn" onClick={() => send('PATCH', { nativeLang, timezone, deliveryTime }, 'Delivery settings saved.')}>
+        <label className="check">
+          <input type="checkbox" checked={emailEnabled} onChange={e => setEmailEnabled(e.target.checked)} />
+          Email me when my stories arrive
+        </label>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => send('PATCH', { nativeLang, timezone, deliveryTime, emailEnabled }, 'Delivery settings saved.')}
+        >
           Save
         </button>
       </section>
@@ -183,6 +193,14 @@ export default function Settings(props) {
           font: inherit;
           font-weight: 700;
           cursor: pointer;
+        }
+        .check {
+          flex-direction: row;
+          align-items: center;
+          gap: 8px;
+          font-weight: 400;
+          font-size: 15px;
+          margin-top: 16px;
         }
         .sub {
           color: #5a5a5a;

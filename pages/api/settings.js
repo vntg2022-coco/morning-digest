@@ -1,5 +1,5 @@
 // Reader settings.
-//   PATCH { nativeLang, timezone, deliveryTime }
+//   PATCH { nativeLang, timezone, deliveryTime, emailEnabled }
 //   POST  { action: 'add', lang, level }   add a language if the list has room
 //   POST  { action: 'reorder', order }     save the order of the list; on Standard the
 //                                          top language is the one delivered (switch freely)
@@ -30,7 +30,12 @@ export default async function handler(req, res) {
     }
     const { error } = await db
       .from('profiles')
-      .update({ native_lang: body.nativeLang, timezone: body.timezone, delivery_time: body.deliveryTime })
+      .update({
+        native_lang: body.nativeLang,
+        timezone: body.timezone,
+        delivery_time: body.deliveryTime,
+        email_enabled: body.emailEnabled !== false,
+      })
       .eq('id', user.id)
     if (error) return res.status(500).json({ error: error.message })
     return res.status(200).json({ ok: true })
