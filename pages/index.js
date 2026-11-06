@@ -74,7 +74,7 @@ export default function LandingPage() {
               <a key={href} href={href}>{label}</a>
             ))}
             <Link href="/login" legacyBehavior passHref><a>Log in</a></Link>
-            <Link href="/signup" legacyBehavior passHref><a className="mobile-cta">Start free trial</a></Link>
+            <Link href="/signup" legacyBehavior passHref><a className="mobile-cta">Try it free today</a></Link>
           </nav>
         )}
       </header>
@@ -94,7 +94,7 @@ export default function LandingPage() {
               Every morning, three real news stories arrive in your learning language, at your level, side by side with your own language.
             </p>
             <div className="ctas">
-              <Link href="/signup" legacyBehavior passHref><a className="btn primary">Start your 7-day free trial</a></Link>
+              <Link href="/signup" legacyBehavior passHref><a className="btn primary">Read today&apos;s stories free</a></Link>
               <Link href="/login" legacyBehavior passHref><a className="btn ghost">Log in</a></Link>
             </div>
           </div>
@@ -168,8 +168,8 @@ export default function LandingPage() {
       <section id="pricing" className="section tint">
         <div className="wrap center">
           <p className="kicker">Pricing</p>
-          <h2>Try Premium free for 7 days</h2>
-          <p className="sub">After the trial, keep the plan that fits you. Cancel anytime.</p>
+          <h2>Read today free. Then try Premium for 7 days.</h2>
+          <p className="sub">Sign up without a card and read today&apos;s stories with every Premium feature. Want more? Start a 7-day free trial, then keep the plan that fits you. Cancel anytime.</p>
           <div className="plans">
             {PLANS.map(p => (
               <div key={p.name} className={`plan ${p.featured ? 'featured' : ''}`}>
@@ -179,7 +179,7 @@ export default function LandingPage() {
                 <ul>
                   {p.features.map(f => <li key={f}>{f}</li>)}
                 </ul>
-                <Link href="/signup" legacyBehavior passHref><a className={`btn ${p.featured ? 'light' : 'primary'}`}>Start free trial</a></Link>
+                <Link href="/signup" legacyBehavior passHref><a className={`btn ${p.featured ? 'light' : 'primary'}`}>Try it free today</a></Link>
               </div>
             ))}
           </div>
@@ -193,7 +193,7 @@ export default function LandingPage() {
           <Mailbox interactive={false} size={180} />
           <div>
             <h2>“{TAGLINE}”</h2>
-            <Link href="/signup" legacyBehavior passHref><a className="btn primary">Start your free trial</a></Link>
+            <Link href="/signup" legacyBehavior passHref><a className="btn primary">Read today&apos;s stories free</a></Link>
             <a href="#top" className="back">Back to top ↑</a>
           </div>
         </div>

@@ -1,25 +1,20 @@
-// Called by Vercel Cron every morning (see vercel.json).
-// Builds the day's content for the editions listed in DIGEST_EDITIONS
-// ("es:intermediate:en,zh:beginner:ja"). Saving it and emailing readers is
-// wired up with the user database (build steps 3 and 5).
+// Called by Vercel Cron every morning (see vercel.json): builds the day's
+// content for every edition an active reader needs. Emailing readers is build step 5.
 
-import { buildDailyContent, parseEdition } from '../../../lib/pipeline/daily.mjs'
+import { buildDay } from '../../../lib/pipeline/daily.mjs'
+import { activeEditions } from '../../../lib/store.mjs'
 
-export const config = { maxDuration: 300 }
+export const config = { maxDuration: 800 }
 
 export default async function handler(req, res) {
   // Vercel sends "Authorization: Bearer <CRON_SECRET>" on cron invocations.
   if (!process.env.CRON_SECRET || req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
-  if (!process.env.DIGEST_EDITIONS) {
-    return res.status(200).json({ ok: true, skipped: 'DIGEST_EDITIONS is not set' })
-  }
-
   try {
-    const editions = process.env.DIGEST_EDITIONS.split(',').map(s => parseEdition(s.trim()))
-    const content = await buildDailyContent({ editions })
-    return res.status(200).json({ ok: true, date: content.date, editions: Object.keys(content.editions), usage: content.usage })
+    const result = await buildDay(await activeEditions())
+    if (result.failures.length) console.error('Some editions failed:', result.failures)
+    return res.status(200).json({ ok: true, ...result })
   } catch (err) {
     console.error('Daily content build failed:', err)
     return res.status(500).json({ ok: false, error: err.message })

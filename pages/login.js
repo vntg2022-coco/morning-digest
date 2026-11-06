@@ -42,7 +42,7 @@ export default function Login() {
       <p className="note">
         New here?{' '}
         <Link href="/signup" legacyBehavior>
-          <a>Start your free trial</a>
+          <a>Try it free today</a>
         </Link>
       </p>
     </AuthLayout>

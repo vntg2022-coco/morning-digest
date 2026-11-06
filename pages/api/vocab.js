@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   if (!user) return res.status(401).json({ error: 'Please log in again.' })
 
   const db = adminDb()
-  const { data: profile } = await db.from('profiles').select('plan, trial_ends_at, native_lang').eq('id', user.id).single()
+  const { data: profile } = await db.from('profiles').select('plan, trial_ends_at, preview_ends_at, native_lang').eq('id', user.id).single()
   if (!PLANS[currentPlan(profile)].vocab) return res.status(403).json({ error: 'The vocab list is part of Premium.' })
 
   if (req.method === 'DELETE') {

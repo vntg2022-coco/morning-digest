@@ -83,7 +83,7 @@ export default function Onboarding() {
           ))}
         </select>
 
-        <p className="fine">You can add more languages later, but a language can&apos;t be removed once you choose it.</p>
+        <p className="fine">You can add more languages later. Swapping a language for another is possible once every 30 days.</p>
 
         <label id="level-label">Your level</label>
         <div className="levels" role="radiogroup" aria-labelledby="level-label">

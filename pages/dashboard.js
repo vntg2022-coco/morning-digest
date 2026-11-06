@@ -1,6 +1,6 @@
 // News box: today's 3 stories for the selected learning language.
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import AppLayout from '../components/AppLayout'
@@ -9,6 +9,7 @@ import { storyAccess } from '../lib/access.mjs'
 import { LANGUAGE_BY_CODE } from '../lib/languages.mjs'
 import { PLANS } from '../lib/plans.mjs'
 import { loadReader } from '../lib/reader-context'
+import { todayUtc } from '../lib/pipeline/daily.mjs'
 import { getPicks, latestEdition } from '../lib/store.mjs'
 
 export async function getServerSideProps(ctx) {
@@ -20,11 +21,18 @@ export async function getServerSideProps(ctx) {
     ? await latestEdition({ lang: selected.lang, level: selected.level, native: profile.native_lang })
     : null
   const picks = selected && edition ? await getPicks(reader.user.id, selected.lang) : {}
+  // Build on the spot when this reader's combination has no stories yet, or a
+  // preview reader signed up after the morning run.
+  const preparing =
+    Boolean(selected) && !selected.paused && plan !== 'inactive' && (!edition || (plan === 'preview' && edition.date !== todayUtc()))
 
   return {
     props: {
       plan,
+      savedPlan: profile.plan,
+      preparing,
       trialEndsAt: profile.trial_ends_at,
+      previewEndsAt: profile.preview_ends_at,
       deliveryTime: profile.delivery_time,
       nativeLang: profile.native_lang,
       languages,
@@ -53,7 +61,51 @@ function formatTime(t) {
   return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`
 }
 
-export default function NewsBox({ plan, trialEndsAt, deliveryTime, nativeLang, languages, selected, date, stories }) {
+// Starts building today's stories and refreshes the page when they're ready.
+function Preparing() {
+  const router = useRouter()
+  const [slow, setSlow] = useState(false)
+  useEffect(() => {
+    let stop = false
+    const started = Date.now()
+    fetch('/api/prepare', { method: 'POST' })
+    const poll = async () => {
+      if (stop) return
+      const res = await fetch('/api/prepare').then(r => r.json()).catch(() => ({}))
+      if (res.ready) return router.replace(router.asPath)
+      if (Date.now() - started > 4 * 60e3) setSlow(true)
+      setTimeout(poll, 5000)
+    }
+    const t = setTimeout(poll, 5000)
+    return () => {
+      stop = true
+      clearTimeout(t)
+    }
+  }, [router])
+  return (
+    <div className="preparing" role="status">
+      <h1>Writing your stories…</h1>
+      <p>We&apos;re retelling today&apos;s news in your language and level. This takes 1–3 minutes; the page updates by itself.</p>
+      {slow && <p>Still working. If this takes much longer, refresh the page.</p>}
+      <style jsx>{`
+        h1 {
+          font-family: var(--font-serif), Georgia, serif;
+          font-weight: 400;
+          font-size: 36px;
+          margin: 0 0 10px;
+        }
+        p {
+          color: #5a5a5a;
+          font-size: 17px;
+        }
+      `}</style>
+    </div>
+  )
+}
+
+const when = d => new Date(d).toLocaleString('en-US', { weekday: 'long', hour: 'numeric', minute: '2-digit' })
+
+export default function NewsBox({ plan, savedPlan, preparing, trialEndsAt, previewEndsAt, deliveryTime, nativeLang, languages, selected, date, stories }) {
   const router = useRouter()
   const [confirming, setConfirming] = useState(null)
   const [error, setError] = useState('')
@@ -75,24 +127,30 @@ export default function NewsBox({ plan, trialEndsAt, deliveryTime, nativeLang, l
     <AppLayout title="Today">
       <LanguageTabs languages={languages} selected={selected?.lang} basePath="/dashboard" />
 
-      {plan === 'trial' && (
+      {plan === 'preview' && previewEndsAt && (
         <p className="banner">
-          Free trial: you have Premium until{' '}
-          {new Date(trialEndsAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}.
+          Free preview: every Premium feature until {when(previewEndsAt)}. Then start your 7-day free trial to keep reading (coming soon).
         </p>
       )}
+      {plan === 'trial' && trialEndsAt && (
+        <p className="banner">Free trial: you have Premium until {when(trialEndsAt)}.</p>
+      )}
       {plan === 'inactive' && (
-        <p className="banner warn">Your free trial has ended. Choose a plan to keep reading (coming soon).</p>
+        <p className="banner warn">
+          {savedPlan === 'preview' ? 'Your free preview day has ended.' : 'Your free trial has ended.'} Start your 7-day free trial or choose a plan to keep reading (coming soon).
+        </p>
       )}
 
       {selected?.paused ? (
         <div className="empty">
           <h1>{lang.name} is paused</h1>
           <p>
-            Your current plan includes fewer languages, so new {lang.name} stories are paused. Your {lang.name} archive and vocab list are
-            still here. Upgrade to Premium or add {lang.name} for a one-time $4.99 to get new stories again (coming soon).
+            Paused languages get no new stories. Your {lang.name} archive and vocab list are still here. To get new {lang.name} stories, move it
+            back to your main languages in Settings.
           </p>
         </div>
+      ) : preparing ? (
+        <Preparing />
       ) : !date ? (
         <div className="empty">
           <h1>Your first stories are on their way</h1>

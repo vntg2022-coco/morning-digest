@@ -43,7 +43,7 @@ export default function Signup() {
   }
 
   return (
-    <AuthLayout title="Start your free trial" subtitle="7 days of Premium, free. Three stories every morning in the language you're learning.">
+    <AuthLayout title="Try today’s stories free" subtitle="No card needed. Read today’s 3 stories with every Premium feature until tomorrow morning.">
       <form onSubmit={handleSubmit} noValidate>
         <label htmlFor="email">Email address</label>
         <input id="email" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} />

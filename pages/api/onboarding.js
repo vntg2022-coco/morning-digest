@@ -1,6 +1,7 @@
 // Saves the first-run settings: native language, first learning language and
 // level, time zone and delivery time.
 
+import { previewEndsAt } from '../../lib/plans.mjs'
 import { createSupabaseAdmin, createSupabaseServer } from '../../lib/supabase/server'
 import { isDeliveryTime, isLanguage, isLevel, isTimeZone } from '../../lib/validate.mjs'
 
@@ -20,13 +21,13 @@ export default async function handler(req, res) {
   const admin = createSupabaseAdmin()
 
   // Onboarding runs once; later changes go through settings, which enforce plan limits.
-  const { data: profile } = await admin.from('profiles').select('onboarded_at').eq('id', user.id).single()
+  const { data: profile } = await admin.from('profiles').select('onboarded_at, plan').eq('id', user.id).single()
   if (profile?.onboarded_at) return res.status(409).json({ error: 'You have already finished setup.' })
 
-  const { error: profileError } = await admin
-    .from('profiles')
-    .update({ native_lang: nativeLang, timezone, delivery_time: deliveryTime, onboarded_at: new Date().toISOString() })
-    .eq('id', user.id)
+  const update = { native_lang: nativeLang, timezone, delivery_time: deliveryTime, onboarded_at: new Date().toISOString() }
+  // The free preview day runs until the reader's next morning delivery.
+  if (profile?.plan === 'preview') update.preview_ends_at = previewEndsAt(deliveryTime, timezone).toISOString()
+  const { error: profileError } = await admin.from('profiles').update(update).eq('id', user.id)
   if (profileError) return res.status(500).json({ error: profileError.message })
 
   const { error: langError } = await admin

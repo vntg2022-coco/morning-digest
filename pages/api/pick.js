@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   if (!Number.isInteger(articleId)) return res.status(400).json({ error: 'Unknown story.' })
 
   const db = adminDb()
-  const { data: profile } = await db.from('profiles').select('plan, trial_ends_at').eq('id', user.id).single()
+  const { data: profile } = await db.from('profiles').select('plan, trial_ends_at, preview_ends_at').eq('id', user.id).single()
   const plan = currentPlan(profile)
   if (plan === 'inactive') return res.status(403).json({ error: 'Choose a plan to keep reading.' })
   // Plans with all 3 stories don't need to pick.
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   const { data: article } = await db.from('articles').select('lang, stories!inner(id, date)').eq('id', articleId).single()
   if (!article) return res.status(404).json({ error: 'Unknown story.' })
 
-  const { data: languages } = await db.from('learning_languages').select('lang, purchased, created_at').eq('user_id', user.id)
+  const { data: languages } = await db.from('learning_languages').select('lang, purchased, active, created_at').eq('user_id', user.id)
   if (!activeLanguageCodes(profile, languages ?? []).has(article.lang)) {
     return res.status(403).json({ error: 'That story is not in one of your active languages.' })
   }
