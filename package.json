@@ -12,7 +12,8 @@
     "digest:preview": "node --env-file=.env.local scripts/preview-digest.mjs",
     "db:migrate": "node --env-file=.env.local scripts/db-migrate.mjs",
     "verify": "npm run lint && NEXT_DIST_DIR=.next-verify next build --no-lint",
-    "email:test": "node --env-file=.env.local scripts/send-test-email.mjs"
+    "email:test": "node --env-file=.env.local scripts/send-test-email.mjs",
+    "stripe:setup": "node --env-file=.env.local scripts/stripe-setup.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
@@ -23,6 +24,7 @@
     "react": "^18",
     "react-dom": "^18",
     "resend": "^6.32.0",
+    "stripe": "^23.1.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {

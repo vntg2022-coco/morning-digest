@@ -26,6 +26,8 @@ case "$name" in
   NEXT_PUBLIC_SUPABASE_URL) expected="https://" ;;
   SUPABASE_ACCESS_TOKEN) expected="sbp_" ;;
   RESEND_API_KEY) expected="re_" ;;
+  STRIPE_SECRET_KEY) expected="sk_" ;;
+  STRIPE_WEBHOOK_SECRET) expected="whsec_" ;;
   *) expected="" ;;
 esac
 if [[ -n "$expected" && "$value" != "$expected"* ]]; then

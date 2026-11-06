@@ -75,7 +75,7 @@ export default async function handler(req, res) {
     if (existing) return res.status(409).json({ error: `${name} is already on your list.` })
     if (!isLevel(body.level)) return res.status(400).json({ error: 'Choose your level.' })
     if (languages.length >= listCapacity(profile, languages)) {
-      return res.status(403).json({ error: `Your language list is full. Add another language for a one-time ${ADD_ON_PRICE} (coming soon).` })
+      return res.status(403).json({ error: `Your language list is full. Add another language for a one-time ${ADD_ON_PRICE} on the Plan page.` })
     }
     const { error } = await db.from('learning_languages').insert({ user_id: user.id, lang: body.lang, level: body.level, active: true })
     if (error) return res.status(500).json({ error: error.message })

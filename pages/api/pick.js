@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   if (!Number.isInteger(articleId)) return res.status(400).json({ error: 'Unknown story.' })
 
   const db = adminDb()
-  const { data: profile } = await db.from('profiles').select('plan, trial_ends_at, preview_ends_at').eq('id', user.id).single()
+  const { data: profile } = await db.from('profiles').select('plan, trial_ends_at, preview_ends_at, extra_language_slots').eq('id', user.id).single()
   const plan = currentPlan(profile)
   if (plan === 'inactive') return res.status(403).json({ error: 'Choose a plan to keep reading.' })
   // Plans with all 3 stories don't need to pick.

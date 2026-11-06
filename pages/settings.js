@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import AppLayout from '../components/AppLayout'
 import LanguageList from '../components/LanguageList'
@@ -136,8 +137,9 @@ export default function Settings(props) {
           {plan === 'trial' && trialEndsAt && ` — Premium features until ${fmt(trialEndsAt)}`}
         </p>
         <p className="sub">
-          Start your 7-day free trial to keep reading after your preview day. Then Standard $4.99/month or Premium $9.99/month. Payments
-          are coming soon.
+          <Link href="/billing" legacyBehavior>
+            <a className="plan-link">Manage your plan, start a trial or add languages →</a>
+          </Link>
         </p>
         <p className="sub">Signed in as {email}</p>
       </section>
@@ -201,6 +203,9 @@ export default function Settings(props) {
           font-weight: 400;
           font-size: 15px;
           margin-top: 16px;
+        }
+        .plan-link {
+          color: #326891;
         }
         .sub {
           color: #5a5a5a;

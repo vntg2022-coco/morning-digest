@@ -178,7 +178,7 @@ export default function LanguageList({ languages, capacity, delivered, addOnPric
           : delivered > 1
             ? 'Every language on your list gets new stories each morning. Drag to change the order.'
             : 'Drag to change the order.'}{' '}
-        {freeSlots === 0 && `Want another language? Add one for a one-time ${addOnPrice} (coming soon).`}
+        {freeSlots === 0 && `Want another language? Add one for a one-time ${addOnPrice} on the Plan page.`}
       </p>
 
       <style jsx>{`

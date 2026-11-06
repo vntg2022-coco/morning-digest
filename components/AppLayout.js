@@ -10,6 +10,7 @@ const NAV = [
   ['/archive', 'Archive'],
   ['/vocab', 'Vocab list'],
   ['/settings', 'Settings'],
+  ['/billing', 'Plan'],
 ]
 
 export default function AppLayout({ title, children, wide = false }) {

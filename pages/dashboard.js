@@ -129,7 +129,11 @@ export default function NewsBox({ plan, savedPlan, preparing, trialEndsAt, previ
 
       {plan === 'preview' && previewEndsAt && (
         <p className="banner">
-          Free preview: every Premium feature until {when(previewEndsAt)}. Then start your 7-day free trial to keep reading (coming soon).
+          Free preview: every Premium feature until {when(previewEndsAt)}.{' '}
+          <Link href="/billing" legacyBehavior>
+            <a>Start your 7-day free trial</a>
+          </Link>{' '}
+          to keep reading after that.
         </p>
       )}
       {plan === 'trial' && trialEndsAt && (
@@ -137,7 +141,11 @@ export default function NewsBox({ plan, savedPlan, preparing, trialEndsAt, previ
       )}
       {plan === 'inactive' && (
         <p className="banner warn">
-          {savedPlan === 'preview' ? 'Your free preview day has ended.' : 'Your free trial has ended.'} Start your 7-day free trial or choose a plan to keep reading (coming soon).
+          {savedPlan === 'preview' ? 'Your free preview day has ended.' : 'Your access has ended.'}{' '}
+          <Link href="/billing" legacyBehavior>
+            <a>{savedPlan === 'preview' ? 'Start your 7-day free trial' : 'Choose a plan'}</a>
+          </Link>{' '}
+          to keep reading.
         </p>
       )}
 
@@ -230,6 +238,10 @@ export default function NewsBox({ plan, savedPlan, preparing, trialEndsAt, previ
           font-size: 14px;
           border-radius: 3px;
           margin: 0 0 24px;
+        }
+        .banner a {
+          color: #326891;
+          font-weight: 600;
         }
         .banner.warn {
           background: #fdecea;
