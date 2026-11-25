@@ -1,12 +1,12 @@
-// Called by Vercel Cron every 15 minutes (see vercel.json): emails every
+// Called every 15 minutes by GitHub Actions (.github/workflows/deliver.yml): emails every
 // reader whose local delivery time has come. Builds any missing editions first.
 
 import { deliverMorning } from '../../../lib/delivery.mjs'
 
-export const config = { maxDuration: 800 }
+export const config = { maxDuration: 300 }
 
 export default async function handler(req, res) {
-  // Vercel sends "Authorization: Bearer <CRON_SECRET>" on cron invocations.
+  // The caller sends "Authorization: Bearer <CRON_SECRET>".
   if (!process.env.CRON_SECRET || req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Unauthorized' })
   }

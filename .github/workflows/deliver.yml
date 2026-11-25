@@ -1,0 +1,32 @@
+# Sends the morning emails: every 15 minutes, asks the site to email readers
+# whose delivery time has come. Runs here because Vercel's free plan only
+# allows daily cron jobs. GitHub may start a run a few minutes late; the
+# 3-hour delivery window in lib/delivery.mjs absorbs that.
+#
+# Needs two repository secrets (Settings → Secrets and variables → Actions):
+#   APP_URL      the live site, e.g. https://example.com
+#   CRON_SECRET  the same value as CRON_SECRET in Vercel
+name: Morning delivery
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  deliver:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Ask the site to send due emails
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "APP_URL or CRON_SECRET is not set; skipping."
+            exit 0
+          fi
+          curl --fail-with-body --silent --show-error --max-time 320 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$APP_URL/api/cron/deliver"

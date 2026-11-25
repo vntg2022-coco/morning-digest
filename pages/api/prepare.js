@@ -10,7 +10,7 @@ import { activeLanguageCodes, currentPlan } from '../../lib/plans.mjs'
 import { adminDb } from '../../lib/store.mjs'
 import { createSupabaseServer } from '../../lib/supabase/server'
 
-export const config = { maxDuration: 800 }
+export const config = { maxDuration: 300 }
 
 // Editions being built by this server instance, so repeated POSTs don't start duplicates.
 const building = new Map()

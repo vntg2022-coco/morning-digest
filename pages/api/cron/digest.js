@@ -4,7 +4,7 @@
 import { buildDay } from '../../../lib/pipeline/daily.mjs'
 import { activeEditions } from '../../../lib/store.mjs'
 
-export const config = { maxDuration: 800 }
+export const config = { maxDuration: 300 }
 
 export default async function handler(req, res) {
   // Vercel sends "Authorization: Bearer <CRON_SECRET>" on cron invocations.

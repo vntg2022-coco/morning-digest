@@ -105,3 +105,4 @@
 - Stripeの本番モード:日本の法人の本人確認と、**日本の法人口座**を入金先に登録。代表者は18歳以上
 - Stripeの本番キーで `npm run stripe:setup` を実行し、本番サイトのWebhook(`/api/stripe/webhook`)を登録
 - メールのフッターに載せる連絡先住所(CAN-SPAM)を決める
+- 本番の課金を始める前に **Vercel を Pro プランにする**(無料のHobbyプランは非商用のみ。朝のメールは GitHub Actions が15分おきに起動しているので、Proにしたら `vercel.json` に戻してもよい)
