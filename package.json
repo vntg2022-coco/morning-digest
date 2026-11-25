@@ -5,15 +5,32 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "set-key": "zsh scripts/set-key.sh",
+    "check-keys": "zsh scripts/check-keys.sh",
+    "digest:preview": "node --env-file=.env.local scripts/preview-digest.mjs",
+    "db:migrate": "node --env-file=.env.local scripts/db-migrate.mjs",
+    "verify": "npm run lint && NEXT_DIST_DIR=.next-verify next build --no-lint",
+    "email:test": "node --env-file=.env.local scripts/send-test-email.mjs",
+    "stripe:setup": "node --env-file=.env.local scripts/stripe-setup.mjs"
   },
   "dependencies": {
-    "next": "14.2.5",
+    "@anthropic-ai/sdk": "^0.131.0",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.118.0",
+    "@vercel/functions": "^3.11.0",
+    "next": "^14.2.35",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "resend": "^6.32.0",
+    "stripe": "^23.1.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.3.0"
   }

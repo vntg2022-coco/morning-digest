@@ -1,2 +1,21 @@
 node_modules/
 .next/
+out/
+
+# env files (commit only .env.example)
+.env
+.env*.local
+.env.development
+.env.production
+
+# OS / editor
+.DS_Store
+*.log
+.vercel
+
+# Generated digest previews
+previews/
+
+# Generated daily content (local dev store)
+data/
+.next-verify/
